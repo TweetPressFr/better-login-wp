@@ -1,0 +1,46 @@
+# Copyright (C) 2017 Better Login WP
+# This file is distributed under the same license as the Better Login WP package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Better Login WP 0.1\n"
+"POT-Creation-Date: 2017-12-28 00:59:42+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2017-MO-DA HO:MI+ZONE\n"
+
+#: better-loginwp.php:21
+msgid "Wait ! Your credentials are wrong !"
+msgstr ""
+
+#: better-loginwp.php:101
+msgid "<strong>Error</strong>: You are actually ignoring the WordPress warning \"weak password\". We cannot allow you to do it. Please retry with a stronger password."
+msgstr ""
+
+#: better-loginwp.php:110
+msgid "<strong>Error</strong>: Your password is too short ! At least use 8 chars please."
+msgstr ""
+
+#: better-loginwp.php:119
+msgid "<strong>Error</strong>: Your password is in the list of the world's weakest passwords. We cannot allow you to use it. Please retry with a stronger password."
+msgstr ""
+
+#: better-loginwp.php:142
+msgid "<strong>Error</strong>: Your password is too short and has been deactivated by the administrator. You have to use the \"Lost Password\" function to create a new password that is more secure."
+msgstr ""
+
+#: better-loginwp.php:148
+msgid "<strong>ERROR</strong>: Your password is in the list of the world's weakest passwords, and has been deactivated by the administrator. You have to use the 'Lost Password' function to create a new password that is more secure."
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "Better Login WP"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "Just make it harder WordPress !"
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Julien Maury"
+msgstr ""
