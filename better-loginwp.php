@@ -1,24 +1,27 @@
 <?php
+
 /**
  * Plugin name: Better Login WP
  * Description: Just make it harder WordPress !
- * Version: 0.1
+ * Version: 0.2
  * Author: Julien Maury
  * Text Domain: blw
  * Domain Path:  /languages
  */
 
-defined( 'ABSPATH' )
-or die ( 'No' );
+defined('ABSPATH')
+    or die('No');
 
-add_action( 'init', '_blw_load_textdomain' );
-function _blw_load_textdomain() {
-	load_plugin_textdomain( 'blw', false, basename( dirname( __FILE__ ) ) . '/languages' );
+add_action('init', '_blw_load_textdomain');
+function _blw_load_textdomain()
+{
+    load_plugin_textdomain('blw', false, basename(dirname(__FILE__)) . '/languages');
 }
 
-add_filter( 'login_errors', '_blw_error_messages' );
-function _blw_error_messages() {
-	return __( 'Wait ! Your credentials are wrong !', 'blw' );
+add_filter('login_errors', '_blw_error_messages');
+function _blw_error_messages()
+{
+    return __('Wait ! Your credentials are wrong !', 'blw');
 }
 
 /**
@@ -28,44 +31,45 @@ function _blw_error_messages() {
  * @return array
  * @author Julien Maury
  */
-function _blw_get_list() {
-	$list = (array) apply_filters( 'blw_weak_passwd_list', [
-		'123456',
-		'password',
-		'12345678',
-		'qwerty',
-		'12345',
-		'123456789',
-		'letmein',
-		'1234567',
-		'football',
-		'iloveyou',
-		'admin',
-		'welcome',
-		'monkey',
-		'login',
-		'abc123',
-		'starwars',
-		'123123',
-		'dragon',
-		'passw0rd',
-		'master',
-		'hello',
-		'freedom',
-		'whatever',
-		'qazwsx',
-		'trustno1',
-	] );
+function _blw_get_list()
+{
+    $list = (array) apply_filters('blw_weak_passwd_list', [
+        '123456',
+        'password',
+        '12345678',
+        'qwerty',
+        '12345',
+        '123456789',
+        'letmein',
+        '1234567',
+        'football',
+        'iloveyou',
+        'admin',
+        'welcome',
+        'monkey',
+        'login',
+        'abc123',
+        'starwars',
+        '123123',
+        'dragon',
+        'passw0rd',
+        'master',
+        'hello',
+        'freedom',
+        'whatever',
+        'qazwsx',
+        'trustno1',
+    ]);
 
-	return array_unique( $list );
+    return array_unique($list);
 }
 
 /**
  * Expose bad passwords
  * @author Julien Maury
  */
-add_action( 'user_profile_update_errors', '_blw_check_password_on_update', 1, 3 );
-add_action( 'validate_password_reset', '_blw_check_password', 10, 2 );
+add_action('user_profile_update_errors', '_blw_check_password_on_update', 1, 3);
+add_action('validate_password_reset', '_blw_check_password', 10, 2);
 
 /**
  * Run check on update profile
@@ -77,8 +81,9 @@ add_action( 'validate_password_reset', '_blw_check_password', 10, 2 );
  * @author Julien Maury
  * @return mixed
  */
-function _blw_check_password_on_update( $errors, $update, $user ) {
-	return _blw_check_password( $errors, $user );
+function _blw_check_password_on_update($errors, $update, $user)
+{
+    return _blw_check_password($errors, $user);
 }
 
 /**
@@ -88,43 +93,43 @@ function _blw_check_password_on_update( $errors, $update, $user ) {
  * @author Julien Maury
  * @return mixed
  */
-function _blw_check_password( $errors, $user ) {
+function _blw_check_password($errors, $user)
+{
 
-	if ( isset( $user->user_pass ) ) {
+    if (isset($user->user_pass)) {
 
-		/**
-		 * use built in password checker
-		 * to bail update if user wants a weak password
-		 * despite the first warning by WP
-		 */
-		if ( isset( $_POST['pw_weak'] ) ) {
-			$errors->add( 'ignoring_wp_warning', __( '<strong>Error</strong>: You are actually ignoring the WordPress warning "weak password". We cannot allow you to do it. Please retry with a stronger password.', 'blw' ) );
-		}
+        /**
+         * use built in password checker
+         * to bail update if user wants a weak password
+         * despite the first warning by WP
+         */
+        if (isset($_POST['pw_weak'])) {
+            $errors->add('ignoring_wp_warning', __('<strong>Error</strong>: You are actually ignoring the WordPress warning "weak password". We cannot allow you to do it. Please retry with a stronger password.', 'blw'));
+        }
 
-		/**
-		 * But that's not enough
-		 * it's easy to disable js
-		 * and the bad game begins
-		 */
-		if ( mb_strlen( $user->user_pass ) < 8 ) {
-			$errors->add( 'password_too_short', __( '<strong>Error</strong>: Your password is too short ! At least use 8 chars please.', 'blw' ) );
-		}
+        /**
+         * But that's not enough
+         * it's easy to disable js
+         * and the bad game begins
+         */
+        if (mb_strlen($user->user_pass) < 8) {
+            $errors->add('password_too_short', __('<strong>Error</strong>: Your password is too short ! At least use 8 chars please.', 'blw'));
+        }
 
-		/**
-		 * I could have added some other checking such as including numbers and letters
-		 * but I DO NOT believe in this stuffs, "pipo21" has both numbers and letters
-		 * and it's a poor password !
-		 */
-		if ( in_array( $user->user_pass, _blw_get_list(), true ) ) {
-			$errors->add( 'password_weak', __( '<strong>Error</strong>: Your password is in the list of the world\'s weakest passwords. We cannot allow you to use it. Please retry with a stronger password.', 'blw' ) );
-		}
+        /**
+         * I could have added some other checking such as including numbers and letters
+         * but I DO NOT believe in this stuffs, "pipo21" has both numbers and letters
+         * and it's a poor password !
+         */
+        if (in_array($user->user_pass, _blw_get_list(), true)) {
+            $errors->add('password_weak', __('<strong>Error</strong>: Your password is in the list of the world\'s weakest passwords. We cannot allow you to use it. Please retry with a stronger password.', 'blw'));
+        }
+    }
 
-	}
-
-	return $errors;
+    return $errors;
 }
 
-add_filter( 'wp_authenticate_user', '_blw_check_password_on_login', 11011, 2 );
+add_filter('wp_authenticate_user', '_blw_check_password_on_login', 11011, 2);
 /**
  * @param $user
  * @param $password
@@ -132,27 +137,28 @@ add_filter( 'wp_authenticate_user', '_blw_check_password_on_login', 11011, 2 );
  * @author Julien Maury
  * @return WP_Error
  */
-function _blw_check_password_on_login( $user, $password ) {
+function _blw_check_password_on_login($user, $password)
+{
 
-	if ( empty( $password ) ) { // the impossible case...
-		return $user;
-	}
-	
-	/** wrong passwd check **/
-	if ( ! wp_check_password( $password, $user->data->user_pass, $user->ID )  ) {
-		return $user;
-	}
+    if (empty($password)) { // the impossible case...
+        return $user;
+    }
 
-	if ( mb_strlen( $password ) < 8 ) {
-		remove_filter( 'login_errors', '_blw_error_messages' );// we need to remove our overriding text
-		new WP_Error('password_too_short', __( '<strong>Error</strong>: Your password is too short and has been deactivated by the administrator. You have to use the "Lost Password" function to create a new password that is more secure.', 'blw' ) );
-	}
+    /** wrong passwd check **/
+    if (!wp_check_password($password, $user->data->user_pass, $user->ID)) {
+        return $user;
+    }
 
-	if ( in_array( $password, _blw_get_list(), true ) ) {
-		remove_filter( 'login_errors', '_blw_error_messages' );// we need to remove our overriding text
+    if (mb_strlen($password) < 8) {
+        remove_filter('login_errors', '_blw_error_messages'); // we need to remove our overriding text
+        new WP_Error('password_too_short', __('<strong>Error</strong>: Your password is too short and has been deactivated by the administrator. You have to use the "Lost Password" function to create a new password that is more secure.', 'blw'));
+    }
 
-		return new WP_Error('password_not_allowed', __( '<strong>ERROR</strong>: Your password is in the list of the world\'s weakest passwords, and has been deactivated by the administrator. You have to use the "Lost Password" function to create a new password that is more secure.' ) );
-	}
+    if (in_array($password, _blw_get_list(), true)) {
+        remove_filter('login_errors', '_blw_error_messages'); // we need to remove our overriding text
 
-	return $user;
+        return new WP_Error('password_not_allowed', __('<strong>ERROR</strong>: Your password is in the list of the world\'s weakest passwords, and has been deactivated by the administrator. You have to use the "Lost Password" function to create a new password that is more secure.'));
+    }
+
+    return $user;
 }
